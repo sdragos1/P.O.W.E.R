@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class BarsScript : MonoBehaviour
 {
-    public float Bar, MaxBar;
+    public float Pollution, MaxBar;
 
     [SerializeField]
-    private BarUI healthBar;
+    private BarUI pollutionBar;
 
     // Start is called before the first frame update
     void Start()
     {
-        healthBar.SetMaxHealth(MaxHealth);
+        pollutionBar.SetMaxBar(MaxBar);
     }
 
     // Update is called once per frame
@@ -20,21 +20,23 @@ public class BarsScript : MonoBehaviour
     {
         if (Input.GetKeyDown("q"))
         {
-            setHealth(-20f);
+            setPollution(-20f);
         }
 
-        if (Input.GetKey("e"))
+        if (Input.GetKeyDown("d"))
         {
-            setHealth(20f);
+            Debug.Log("nigger");
+            setPollution(+20f);
         }
 
     }
 
-    public void setHealth(float healthChange)
+    public void setPollution(float pollutionChange)
     {
-        Health += healthChange;
-        Health = Mathf.Clamp(Health, 0, MaxHealth);
+        Pollution += pollutionChange;
+        Pollution = Mathf.Clamp(Pollution, 0, MaxBar);
 
-        healthBar.SetHealth(Health);
+        pollutionBar.SetPollution(Pollution);
     }
+    
 }
