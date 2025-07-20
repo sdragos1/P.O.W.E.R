@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RobotMovement : MonoBehaviour
 {
-    public float moveSpeed;
+    public float moveSpeed = 0.4f;
     public float tolerance;
     public bool unchosen;
     public Rigidbody2D rb;

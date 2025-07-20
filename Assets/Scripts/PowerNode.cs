@@ -1,3 +1,4 @@
+using Types;
 using UnityEngine;
 
 public class PowerNode : MonoBehaviour
@@ -9,9 +10,13 @@ public class PowerNode : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.CurrentPhase != GamePhase.Execute)
+        {
+            return;
+        }
         if (!_receivedEnergyThisFrame && _energy > 0f)
         {
-            _energy -= Time.deltaTime * 60 * GameManager.Instance.PowerNodeDecayRate;
+            _energy -= Time.deltaTime * GameManager.Instance.PowerNodeDecayRate;
             _energy = Mathf.Max(_energy, 0);
             Debug.Log($"PowerNode at {transform.position} decaying energy. Current energy: {_energy}");
         }
