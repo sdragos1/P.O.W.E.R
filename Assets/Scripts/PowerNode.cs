@@ -1,26 +1,42 @@
-using System;
 using UnityEngine;
 
 public class PowerNode : MonoBehaviour
 {
     [SerializeField] private Transform _energyBarTransform;
-    
+
     private float _energy;
-    
+    private bool _receivedEnergyThisFrame = false;
+
+    private void Update()
+    {
+        if (!_receivedEnergyThisFrame && _energy > 0f)
+        {
+            _energy -= Time.deltaTime * 60 * GameManager.Instance.PowerNodeDecayRate;
+            _energy = Mathf.Max(_energy, 0);
+            Debug.Log($"PowerNode at {transform.position} decaying energy. Current energy: {_energy}");
+        }
+
+        UpdateEnergyBar();
+
+        // Reset flag at end of frame
+        _receivedEnergyThisFrame = false;
+    }
+
     public void ReceiveEnergyFrom(Robot robot)
     {
         float power = robot.GetPowerOutput();
         _energy = Mathf.Min(_energy + power * Time.deltaTime, GameManager.Instance.PowerNodeMaxEnergy);
+        _receivedEnergyThisFrame = true;
+
         if (_energy >= GameManager.Instance.PowerNodeMaxEnergy)
         {
             _energy = GameManager.Instance.PowerNodeMaxEnergy;
             Debug.Log($"PowerNode at {transform.position} is fully charged.");
         }
+
         Debug.Log($"PowerNode at {transform.position} received energy. Current energy: {_energy}");
-        
-        UpdateEnergyBar();
     }
-    
+
     private void UpdateEnergyBar()
     {
         float normalized = _energy / GameManager.Instance.PowerNodeMaxEnergy;

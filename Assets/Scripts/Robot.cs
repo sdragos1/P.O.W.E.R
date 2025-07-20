@@ -15,6 +15,8 @@ public class Robot : MonoBehaviour
         _lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         _lineRenderer.startWidth = 0.05f;
         _lineRenderer.endWidth = 0.05f;
+        _lineRenderer.startColor = Color.yellow;
+        _lineRenderer.endColor = Color.green;
     }
 
     private void Update()
@@ -60,6 +62,6 @@ public class Robot : MonoBehaviour
 
     public float GetPowerOutput()
     {
-        return 10f;
+        return 30f;
     }
 }
