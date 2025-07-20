@@ -1,30 +1,36 @@
+using Types;
 using UnityEngine;
 
 public class SolarRobotMovement : MonoBehaviour
 {
-    public float moveSpeed;
-    private float tolerance;
-    private bool unchosen;
+    public float moveSpeed = 0.4f;
+    public float tolerance;
+    public bool unchosen;
     public Rigidbody2D rb;
     private float Timer;
     private Vector2 moveDirection;
 
     SpriteRenderer spriteRenderer;
-    
+
     void Start()
     {
         Timer = 60f;
-        
+
         unchosen = true;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
+
     void Update()
     {
         if (Timer < 60f)
         {
             Timer += 1;
         }
-            
+
+        if (GameManager.Instance.CurrentPhase != GamePhase.Execute)
+        {
+            return;
+        }
 
         if (moveDirection.x == -1)
         {
@@ -34,25 +40,27 @@ public class SolarRobotMovement : MonoBehaviour
         {
             spriteRenderer.flipX = false;
         }
-            ProcessInput();
-        
+
+        ProcessInput();
     }
+
     void FixedUpdate()
     {
-        Move();
-  
+        if (GameManager.Instance.CurrentPhase == GamePhase.Execute)
+        {
+            Move();
+        }
     }
+
     void ProcessInput()
     {
-        if (unchosen == true)
+        if (unchosen)
         {
             if (Input.GetKeyDown("h"))
             {
                 moveDirection.y = 0;
                 moveDirection.x = 1;
                 unchosen = false;
-
-                
             }
             else if (Input.GetKeyDown("v"))
             {
@@ -62,40 +70,36 @@ public class SolarRobotMovement : MonoBehaviour
             }
         }
     }
+
     void resetMove()
     {
         moveDirection *= -1;
         Timer = 0f;
     }
+
     void Move()
     {
-        rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed,moveDirection.y * moveSpeed);
+        rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
         Vector2 Bar = transform.position;
         tolerance = 0.01f;
         if (Timer == 60f)
         {
             if (Mathf.Abs(Bar.x - 19f) < tolerance)
             {
-
                 resetMove();
             }
             else if (Mathf.Abs(Bar.y - 9f) < tolerance)
             {
-
                 resetMove();
             }
             else if (Mathf.Abs(Bar.x) < tolerance)
             {
-
                 resetMove();
             }
             else if (Mathf.Abs(Bar.y) < tolerance)
             {
-
                 resetMove();
             }
         }
-        
     }
-    
 }
