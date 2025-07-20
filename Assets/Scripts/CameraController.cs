@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        mainCamera.orthographicSize = Mathf.Max(verticalSize, horizontalSize);
+        mainCamera.orthographicSize = Mathf.Max(verticalSize, horizontalSize) + 1.5f; // Add a small offset for better visibility
 
         mainCamera.transform.position = new Vector3(
             gridWidth / 2f - 0.5f,

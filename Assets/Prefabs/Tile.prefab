@@ -105,6 +105,8 @@ MonoBehaviour:
   _offsetColor: {r: 0.9137255, g: 0.9019608, b: 0.9019608, a: 1}
   _renderer: {fileID: 6814349105678055548}
   _highlight: {fileID: 6698207687217295573}
+  _solarRobotPrefab: {fileID: 8565255062466585693, guid: 8923f294d1da08342a3a77667a27c925, type: 3}
+  _coalRobotPrefab: {fileID: 3670602387797580203, guid: 8a77ff2d8ab2c684e9cc8dcb95b20281, type: 3}
 --- !u!61 &9029846406053030350
 BoxCollider2D:
   m_ObjectHideFlags: 0
