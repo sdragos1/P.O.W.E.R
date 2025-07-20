@@ -1,4 +1,6 @@
+using System;
 using Types;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -13,13 +15,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float _powerNodeMaxEnergy = 100;
     [SerializeField] private float _powerNodeDecayRate = 5f;
     
+    [Header("General Settings")]
+    [SerializeField] private Vector2 hotspot = Vector2.zero;
+    [SerializeField] private Texture2D customCursor;
+    
     public int GridWidth => _gridWidth;
     public int GridHeight => _gridHeight;
     
     public int PowerNodeCount => _powerNodeCount;
     public float PowerNodeMaxEnergy => _powerNodeMaxEnergy;
     public float PowerNodeDecayRate => _powerNodeDecayRate;
-    
+
+    private void Start()
+    {
+        Cursor.SetCursor(customCursor, hotspot, CursorMode.Auto);
+    }
     
     private void Awake()
     {
