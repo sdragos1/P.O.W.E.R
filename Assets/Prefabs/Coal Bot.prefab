@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5792112916901731823}
   - component: {fileID: 3898879109082071851}
   - component: {fileID: 4186151832236338705}
+  - component: {fileID: 6767280477737406772}
   m_Layer: 0
   m_Name: Coal Bot
   m_TagString: Untagged
@@ -57,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 51b8936d8cf70e4409e779a4b46182fd, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -130,3 +131,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &6767280477737406772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4559459563158528384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e76336376ead0d4a81ae486da6aafe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

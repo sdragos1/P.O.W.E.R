@@ -1,4 +1,5 @@
 using System;
+using Types;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -6,8 +7,6 @@ public class Tile : MonoBehaviour
     [SerializeField] private Color _offsetColor;
     [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private GameObject _highlight;
-    [SerializeField] private GameObject _solarRobotPrefab;
-    [SerializeField] private GameObject _coalRobotPrefab;
 
     public void Init(bool isOffset)
     {
@@ -29,28 +28,22 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (RobotSelectionManager.Instance.SelectedRobot == Types.RobotType.None)
+        if (RobotSelectionManager.Instance.SelectedRobot == RobotType.None)
             return;
-
-
-        if (RobotSelectionManager.Instance.SelectedRobot == Types.RobotType.Solar)
-        {
-            SpawnRobot(_solarRobotPrefab);
-        }
-        else if (RobotSelectionManager.Instance.SelectedRobot == Types.RobotType.Coal)
-        {
-            SpawnRobot(_coalRobotPrefab);
-        }
+        
+        SpawnRobot(RobotSelectionManager.Instance.GetCurrentSelectedRobotPrefab());
         RobotSelectionManager.Instance.ClearSelection();
     }
 
     private void SpawnRobot(GameObject robotPrefab)
     {
+        Transform robotParent = GameObject.Find("Robots")?.transform;
         Console.WriteLine("Robot spawned at: " + transform.position);
         if (robotPrefab == null) return;
 
         Vector3 spawnPosition = new Vector3(transform.position.x, transform.position.y, -1f);
         var robot = Instantiate(robotPrefab, spawnPosition, Quaternion.identity);
-        robot.transform.SetParent(transform);
+        if (robotParent != null)
+            robot.transform.SetParent(robotParent);
     }
 }
