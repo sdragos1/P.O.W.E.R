@@ -10,21 +10,22 @@ public class RobotMovement : MonoBehaviour
     private Vector2 moveDirection;
 
     SpriteRenderer spriteRenderer;
-    
+
     void Start()
     {
         Timer = 60f;
-        
+
         unchosen = true;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
+
     void Update()
     {
         if (Timer < 60f)
         {
             Timer += 1;
         }
-            
+
 
         if (moveDirection.x == -1)
         {
@@ -34,25 +35,24 @@ public class RobotMovement : MonoBehaviour
         {
             spriteRenderer.flipX = false;
         }
-            ProcessInput();
-        
+
+        ProcessInput();
     }
+
     void FixedUpdate()
     {
         Move();
-  
     }
+
     void ProcessInput()
     {
-        if (unchosen == true)
+        if (unchosen)
         {
             if (Input.GetKeyDown("h"))
             {
                 moveDirection.y = 0;
                 moveDirection.x = 1;
                 unchosen = false;
-
-                
             }
             else if (Input.GetKeyDown("v"))
             {
@@ -62,14 +62,16 @@ public class RobotMovement : MonoBehaviour
             }
         }
     }
+
     void resetMove()
     {
         moveDirection *= -1;
         Timer = 0f;
     }
+
     void Move()
     {
-        rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed,moveDirection.y * moveSpeed);
+        rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
         Vector2 Bar = transform.position;
         tolerance = 0.01f;
         Debug.Log(Timer);
@@ -77,26 +79,20 @@ public class RobotMovement : MonoBehaviour
         {
             if (Mathf.Abs(Bar.x - 19f) < tolerance)
             {
-
                 resetMove();
             }
             else if (Mathf.Abs(Bar.y - 9f) < tolerance)
             {
-
                 resetMove();
             }
             else if (Mathf.Abs(Bar.x) < tolerance)
             {
-
                 resetMove();
             }
             else if (Mathf.Abs(Bar.y) < tolerance)
             {
-
                 resetMove();
             }
         }
-        
     }
-    
 }
