@@ -305,8 +305,8 @@ MonoBehaviour:
     icon: {fileID: 599643177966682411, guid: 99c4c56738953274f87d2e56aff118e1, type: 3}
     prefab: {fileID: 4559459563158528384, guid: 61ebef53c9507ad49beb26cf475bf4ff, type: 3}
   - type: 2
-    icon: {fileID: -2728534444349969808, guid: 5a47ae940c406214098cec3317748022, type: 3}
     prefab: {fileID: 8991405976009825491, guid: 78053e4547c41044da72ac4267dc1954, type: 3}
+    icon: {fileID: -2728534444349969808, guid: 5a47ae940c406214098cec3317748022, type: 3}
 --- !u!4 &481789461
 Transform:
   m_ObjectHideFlags: 0
