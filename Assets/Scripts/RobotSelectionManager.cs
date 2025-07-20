@@ -14,7 +14,15 @@ public class RobotSelectionManager : MonoBehaviour
         public RobotType type;
         public Sprite icon;
         public GameObject prefab;
+        public int maxCount = 2;
+        [HideInInspector] public int currentCount = 0;
     }
+    public bool CanPlaceSelectedRobot()
+    {
+        RobotData data = _robots.Find(r => r.type == SelectedRobot);
+        return data != null && data.currentCount < data.maxCount;
+    }
+
 
     [SerializeField] private List<RobotData> _robots;
 
@@ -74,6 +82,14 @@ public class RobotSelectionManager : MonoBehaviour
         else if (Input.GetKeyDown("v"))
         {
             _robotOrientation = "vertical";
+        }
+    }
+    public void RegisterPlacedRobot(RobotType type)
+    {
+        RobotData data = _robots.Find(r => r.type == type);
+        if (data != null)
+        {
+            data.currentCount++;
         }
     }
 }
