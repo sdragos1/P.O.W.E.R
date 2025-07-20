@@ -6,7 +6,6 @@ public class SolarRobotMovement : MonoBehaviour
 {
     public float moveSpeed = 0.4f;
     public float tolerance;
-    public bool unchosen;
     public Rigidbody2D rb;
     private float Timer;
     private Vector2 moveDirection;
@@ -33,7 +32,6 @@ public class SolarRobotMovement : MonoBehaviour
     {
         Timer = 60f;
 
-        unchosen = true;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 

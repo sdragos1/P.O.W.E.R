@@ -7,7 +7,9 @@ public class PowerNode : MonoBehaviour
 
     private float _energy;
     private bool _receivedEnergyThisFrame = false;
-
+    
+    public float CurrentEnergy => _energy;
+    public bool IsFullyCharged => CurrentEnergy >= GameManager.Instance.PowerNodeMaxEnergy;
     private void Update()
     {
         if (GameManager.Instance.CurrentPhase != GamePhase.Execute)

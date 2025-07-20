@@ -1,38 +1,27 @@
 using Types;
 using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CoalRobotMovement : MonoBehaviour
 {
-    public float moveSpeed = 1f;
-    private const float sideLength = 3f;  // 4 tiles = move 3 units per side
+    public float moveSpeed = 2f;
+    private const float sideLength = 3f;    // 3 units per side = 4×4 perimeter
+    private const float arriveTolerance = 0.05f;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
 
-    private Vector2[] directions = new Vector2[]
-    {
-        Vector2.right,
-        Vector2.up,
-        Vector2.left,
-        Vector2.down
-    };
-    private int directionIndex = 0;
-    private Vector2 pivot;  // where this leg started
+    private List<Vector2> waypoints;
+    private int index = 0;
+    private int stepDir = 1;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb             = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        pivot = rb.position;
-    }
-
-    void Update()
-    {
-        // Flip sprite based on horizontal direction
-        var dir = directions[directionIndex];
-        spriteRenderer.flipX = dir.x < 0;
+        BuildPerimeterWaypoints();
     }
 
     void FixedUpdate()
@@ -43,40 +32,58 @@ public class CoalRobotMovement : MonoBehaviour
             return;
         }
 
-        MoveAlongSquareWithBounce();
+        MoveAlongWaypoints();
     }
 
-    private void MoveAlongSquareWithBounce()
+    private void MoveAlongWaypoints()
     {
-        Vector2 dir = directions[directionIndex];
-        Vector2 nextStep = rb.position + dir * moveSpeed * Time.fixedDeltaTime;
+        Vector2 target = waypoints[index];
+        Vector2 dir    = (target - rb.position).normalized;
 
-        // 1) Boundaries of your grid
-        float minX = 0f, minY = 0f;
-        float maxX = GameManager.Instance.GridWidth  - 1;
-        float maxY = GameManager.Instance.GridHeight - 1;
+        // Flip sprite for left movement
+        spriteRenderer.flipX = dir.x < 0;
 
-        // 2) If next step goes out of the main grid bounds, bounce:
-        if (nextStep.x < minX || nextStep.x > maxX ||
-            nextStep.y < minY || nextStep.y > maxY)
-        {
-            // Reverse direction (turn 180°)
-            directionIndex = (directionIndex + 2) % directions.Length;
-            pivot = rb.position;     // start new leg from here
-            rb.linearVelocity = Vector2.zero;
-            return;
-        }
-
-        // 3) No bounce — proceed as normal
         rb.linearVelocity = dir * moveSpeed;
 
-        // 4) Check if we've completed this side
-        float traveled = Vector2.Dot(rb.position - pivot, dir);
-        if (traveled >= sideLength - 0.01f)
+        // Arrived?
+        if (Vector2.Distance(rb.position, target) < arriveTolerance)
         {
-            pivot += dir * sideLength;
-            rb.position = pivot;  // snap to avoid drift
-            directionIndex = (directionIndex + 1) % directions.Length;
+            index += stepDir;
+
+            // Reverse at ends
+            if (index >= waypoints.Count)
+            {
+                index = waypoints.Count - 2; // step back in bounds
+                stepDir = -1;
+            }
+            else if (index < 0)
+            {
+                index = 1;   // step forward in bounds
+                stepDir = 1;
+            }
         }
+    }
+
+    private void BuildPerimeterWaypoints()
+    {
+        // Starting pivot = current position at Start
+        Vector2 origin = rb.position;
+        waypoints = new List<Vector2> { origin };
+
+        // Directions in order: right, up, left, down
+        Vector2[] dirs = { Vector2.right, Vector2.up, Vector2.left, Vector2.down };
+
+        Vector2 current = origin;
+
+        foreach (Vector2 d in dirs)
+        {
+            for (int step = 1; step <= sideLength; step++)
+            {
+                current += d;
+                waypoints.Add(current);
+            }
+        }
+        // Now waypoints contains: origin, R, R, R, U, U, U, L, L, L, D, D, D
+        // which is a 12‑point loop. We’ll patrol back and forth along these.
     }
 }

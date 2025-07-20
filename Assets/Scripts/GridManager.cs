@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Types;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GridManager : MonoBehaviour
@@ -10,14 +9,17 @@ public class GridManager : MonoBehaviour
     private int _width;
     private int _height;
 
+    [Header("UI")]
+    [SerializeField] private Text _poweredNodesText; 
     [SerializeField] private Tile _tilePrefab;
     [SerializeField] private PowerNode _powerNodePrefab;
 
     private Dictionary<Vector2, Tile> _tiles = new();
     private Dictionary<Vector2, PowerNode> _powerNodes = new();
 
-    [Header("Environment")]
-    [SerializeField] private GameObject[] environmentTiles;
+    [Header("Environment")] [SerializeField]
+    private GameObject[] environmentTiles;
+
     [SerializeField] private int environmentPadding = 4;
 
     private void Start()
@@ -28,6 +30,24 @@ public class GridManager : MonoBehaviour
     private void Update()
     {
         DisplayRobotMovement();
+        UpdatePoweredNodesUI();
+    }
+    
+    
+    private void UpdatePoweredNodesUI()
+    {
+        if (_poweredNodesText == null || _powerNodes.Count == 0)
+            return;
+
+        int total   = GameManager.Instance.PowerNodeCount;
+        int powered = 0;
+
+        // count fully charged nodes
+        foreach (var node in _powerNodes.Values)
+            if (node.IsFullyCharged)
+                powered++;
+
+        _poweredNodesText.text = $"Powered Nodes {powered}/{total}";
     }
 
     private void DisplayRobotMovement()
@@ -40,13 +60,14 @@ public class GridManager : MonoBehaviour
             if (movementGO != null && movementGO.activeSelf)
                 movementGO.SetActive(false);
         }
+
         if (RobotSelectionManager.Instance.SelectedRobot == RobotType.None) return;
         if (!GameManager.Instance.HoveredTilePosition.HasValue) return;
 
         Vector2 hovered = GameManager.Instance.HoveredTilePosition.Value;
 
-        int    hx       = Mathf.FloorToInt(hovered.x);
-        int    hy       = Mathf.FloorToInt(hovered.y);
+        int hx = Mathf.FloorToInt(hovered.x);
+        int hy = Mathf.FloorToInt(hovered.y);
 
         if (RobotSelectionManager.Instance.SelectedRobot == RobotType.Solar)
         {
@@ -64,6 +85,7 @@ public class GridManager : MonoBehaviour
                     }
                 }
             }
+
             if (RobotSelectionManager.Instance.RobotOrientation == "vertical")
             {
                 float x = hovered.x;
@@ -79,6 +101,7 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+
         if (RobotSelectionManager.Instance.SelectedRobot == RobotType.Coal)
         {
             // Starting at the hovered tile
@@ -111,7 +134,6 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
-
     }
 
     void GenerateGrid()
@@ -120,7 +142,7 @@ public class GridManager : MonoBehaviour
         _height = GameManager.Instance.GridHeight;
 
         Transform tilesParent = GameObject.Find("Tiles")?.transform;
-        
+
         for (int x = -environmentPadding; x < _width + environmentPadding; x++)
         {
             for (int y = -environmentPadding; y < _height + environmentPadding; y++)
@@ -156,7 +178,7 @@ public class GridManager : MonoBehaviour
 
         SpawnPowerNodes(_width, _height, GameManager.Instance.PowerNodeCount);
     }
-    
+
     void SpawnPowerNodes(int width, int height, int nodeCount)
     {
         List<Vector2Int> allPositions = new();
