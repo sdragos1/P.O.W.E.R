@@ -37,11 +37,13 @@ public class Tile : MonoBehaviour
 
     private void SpawnRobot(GameObject robotPrefab)
     {
+        Transform robotParent = GameObject.Find("Robots")?.transform;
         Console.WriteLine("Robot spawned at: " + transform.position);
         if (robotPrefab == null) return;
 
         Vector3 spawnPosition = new Vector3(transform.position.x, transform.position.y, -1f);
         var robot = Instantiate(robotPrefab, spawnPosition, Quaternion.identity);
-        robot.transform.SetParent(transform);
+        if (robotParent != null)
+            robot.transform.SetParent(robotParent);
     }
 }
