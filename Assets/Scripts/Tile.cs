@@ -26,17 +26,13 @@ public class Tile : MonoBehaviour
     {
         _highlight.SetActive(false);
     }
-    
+
     private void OnMouseDown()
     {
-        Console.WriteLine("Robot spawzedzezedzned at: " + transform.position);
-        
         if (RobotSelectionManager.Instance.SelectedRobot == Types.RobotType.None)
             return;
-        
-        
-        Console.WriteLine("pula spawned at: " + transform.position);
-        
+
+
         if (RobotSelectionManager.Instance.SelectedRobot == Types.RobotType.Solar)
         {
             SpawnRobot(_solarRobotPrefab);
@@ -45,10 +41,9 @@ public class Tile : MonoBehaviour
         {
             SpawnRobot(_coalRobotPrefab);
         }
-        
         RobotSelectionManager.Instance.ClearSelection();
     }
-    
+
     private void SpawnRobot(GameObject robotPrefab)
     {
         Console.WriteLine("Robot spawned at: " + transform.position);
