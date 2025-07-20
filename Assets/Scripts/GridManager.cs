@@ -28,7 +28,7 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < _height; y++)
             {
-                var spawnedTile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity);
+                var spawnedTile = Instantiate(_tilePrefab, new Vector3(x, y, 0), Quaternion.identity);
                 if (tilesParent != null)
                     spawnedTile.transform.SetParent(tilesParent);
                 spawnedTile.name = $"Tile {x}_{y}";
