@@ -32,6 +32,11 @@ public class RobotSelectionManager : MonoBehaviour
     {
         return _robots.Find(r => r.type == type)?.prefab;
     }
+    
+    public GameObject GetCurrentSelectedRobotPrefab()
+    {
+        return GetPrefabFor(SelectedRobot);
+    }
 
     private void Awake()
     {
