@@ -47,6 +47,10 @@ public class GridManager : MonoBehaviour
             if (node.IsFullyCharged)
                 powered++;
 
+        if (powered == total)
+        {
+            GameManager.Instance.SetPhaseAndUpdateUI(2);
+        }
         _poweredNodesText.text = $"Powered Nodes {powered}/{total}";
     }
 

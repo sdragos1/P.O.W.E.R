@@ -55,17 +55,13 @@ public class SolarRobotMovement : MonoBehaviour
         {
             spriteRenderer.flipX = false;
         }
-
     }
 
     void FixedUpdate()
     {
-        if (GameManager.Instance.CurrentPhase == GamePhase.Execute)
-        {
-            Move();
-        }
+        Move();
     }
-    
+
     void resetMove()
     {
         moveDirection *= -1;
@@ -74,6 +70,12 @@ public class SolarRobotMovement : MonoBehaviour
 
     void Move()
     {
+        if (GameManager.Instance.CurrentPhase != GamePhase.Execute)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
         rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
         Vector2 Bar = transform.position;
         tolerance = 0.01f;

@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject bottomUI;
     [SerializeField] private GameObject topUI;
+    [SerializeField] private GameObject winUI;
     
     private GamePhase _currentPhase = GamePhase.None;
     
@@ -61,12 +62,17 @@ public class GameManager : MonoBehaviour
             case GamePhase.Plan:
                 bottomUI.SetActive(true);
                 topUI.SetActive(false);
+                winUI.SetActive(false); 
                 break;
             case GamePhase.Execute:
                 topUI.SetActive(true);
+                winUI.SetActive(false);
                 bottomUI.SetActive(false);
                 break;
             case GamePhase.Finish:
+                topUI.SetActive(false);
+                bottomUI.SetActive(false);
+                winUI.SetActive(true);
                 break;
         }
     }
