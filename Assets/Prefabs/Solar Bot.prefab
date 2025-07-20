@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3441392522445362253}
   - component: {fileID: 171104169743566851}
   - component: {fileID: 3149944473695621758}
-  - component: {fileID: 6921858617971781732}
+  - component: {fileID: 8305845266791687059}
   m_Layer: 0
   m_Name: Solar Bot
   m_TagString: Untagged
@@ -116,7 +116,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &6921858617971781732
+--- !u!114 &8305845266791687059
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
