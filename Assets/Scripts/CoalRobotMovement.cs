@@ -1,10 +1,8 @@
-using System;
-using Types;
 using UnityEngine;
 
-public class SolarRobotMovement : MonoBehaviour
+public class RobotMovement : MonoBehaviour
 {
-    public float moveSpeed = 0.4f;
+    public float moveSpeed;
     public float tolerance;
     public bool unchosen;
     public Rigidbody2D rb;
@@ -12,42 +10,21 @@ public class SolarRobotMovement : MonoBehaviour
     private Vector2 moveDirection;
 
     SpriteRenderer spriteRenderer;
-
-    private void Awake()
-    {
-        if (RobotSelectionManager.Instance.RobotOrientation == "horizontal")
-        {
-            moveDirection = new Vector2(1, 0);
-        }
-        else if (RobotSelectionManager.Instance.RobotOrientation == "vertical")
-        {
-            moveDirection = new Vector2(0, 1);
-        }
-        else
-        {
-            moveDirection = new Vector2(1, 0);
-        }
-    }
-
+    
     void Start()
     {
         Timer = 60f;
-
+        
         unchosen = true;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-
     void Update()
     {
         if (Timer < 60f)
         {
             Timer += 1;
         }
-
-        if (GameManager.Instance.CurrentPhase != GamePhase.Execute)
-        {
-            return;
-        }
+            
 
         if (moveDirection.x == -1)
         {
@@ -57,46 +34,69 @@ public class SolarRobotMovement : MonoBehaviour
         {
             spriteRenderer.flipX = false;
         }
-
+            ProcessInput();
+        
     }
-
     void FixedUpdate()
     {
-        if (GameManager.Instance.CurrentPhase == GamePhase.Execute)
+        Move();
+  
+    }
+    void ProcessInput()
+    {
+        if (unchosen == true)
         {
-            Move();
+            if (Input.GetKeyDown("h"))
+            {
+                moveDirection.y = 0;
+                moveDirection.x = 1;
+                unchosen = false;
+
+                
+            }
+            else if (Input.GetKeyDown("v"))
+            {
+                moveDirection.x = 0;
+                moveDirection.y = 1;
+                unchosen = false;
+            }
         }
     }
-    
     void resetMove()
     {
         moveDirection *= -1;
         Timer = 0f;
     }
-
     void Move()
     {
-        rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+        rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed,moveDirection.y * moveSpeed);
         Vector2 Bar = transform.position;
         tolerance = 0.01f;
+        Debug.Log(Timer);
         if (Timer == 60f)
         {
             if (Mathf.Abs(Bar.x - 19f) < tolerance)
             {
+
                 resetMove();
             }
             else if (Mathf.Abs(Bar.y - 9f) < tolerance)
             {
+
                 resetMove();
             }
             else if (Mathf.Abs(Bar.x) < tolerance)
             {
+
                 resetMove();
             }
             else if (Mathf.Abs(Bar.y) < tolerance)
             {
+
                 resetMove();
             }
         }
+        
     }
+    
 }
