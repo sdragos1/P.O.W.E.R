@@ -8,9 +8,12 @@ public class GameManager : MonoBehaviour
     [Header("Grid Settings")]
     [SerializeField] private int _gridWidth = 10;
     [SerializeField] private int _gridHeight = 10;
+    [SerializeField] private int _powerNodeCount = 5;
     
     public int GridWidth => _gridWidth;
     public int GridHeight => _gridHeight;
+    
+    public int PowerNodeCount => _powerNodeCount;
     
     private void Awake()
     {
