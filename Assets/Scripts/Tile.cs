@@ -30,8 +30,19 @@ public class Tile : MonoBehaviour
     {
         if (RobotSelectionManager.Instance.SelectedRobot == RobotType.None)
             return;
-        
+
+        if (!RobotSelectionManager.Instance.CanPlaceSelectedRobot())
+        {
+            // Show the limit reached message
+            LimitReachedUI limitUI = FindObjectOfType<LimitReachedUI>();
+            if (limitUI != null)
+                limitUI.ShowMessage();
+
+            return;
+        }
+
         SpawnRobot(RobotSelectionManager.Instance.GetCurrentSelectedRobotPrefab());
+        RobotSelectionManager.Instance.RegisterPlacedRobot(RobotSelectionManager.Instance.SelectedRobot);
         RobotSelectionManager.Instance.ClearSelection();
     }
 
