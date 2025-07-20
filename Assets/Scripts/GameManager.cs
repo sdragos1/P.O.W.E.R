@@ -21,8 +21,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject bottomUI;
     [SerializeField] private GameObject topUI;
+    [SerializeField] private GameObject winUI;
     
     private GamePhase _currentPhase = GamePhase.None;
+    
+    private Vector2? _hoveredTilePosition = null;
     
     public GamePhase CurrentPhase => _currentPhase;
     public int GridWidth => _gridWidth;
@@ -31,6 +34,7 @@ public class GameManager : MonoBehaviour
     public int PowerNodeCount => _powerNodeCount;
     public float PowerNodeMaxEnergy => _powerNodeMaxEnergy;
     public float PowerNodeDecayRate => _powerNodeDecayRate;
+    public Vector2? HoveredTilePosition => _hoveredTilePosition;
 
     private void Start()
     {
@@ -58,12 +62,17 @@ public class GameManager : MonoBehaviour
             case GamePhase.Plan:
                 bottomUI.SetActive(true);
                 topUI.SetActive(false);
+                winUI.SetActive(false); 
                 break;
             case GamePhase.Execute:
                 topUI.SetActive(true);
+                winUI.SetActive(false);
                 bottomUI.SetActive(false);
                 break;
             case GamePhase.Finish:
+                topUI.SetActive(false);
+                bottomUI.SetActive(false);
+                winUI.SetActive(true);
                 break;
         }
     }
@@ -72,5 +81,15 @@ public class GameManager : MonoBehaviour
     {
         _currentPhase = (GamePhase)newPhase;
         UpdateUI();
+    }
+    
+    public void SetHoveredTilePosition(Vector2 position)
+    {
+        _hoveredTilePosition = position;
+    }
+    
+    public void ClearHoveredTilePosition()
+    {
+        _hoveredTilePosition = null;
     }
 }

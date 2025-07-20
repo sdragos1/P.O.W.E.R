@@ -8,23 +8,33 @@ public class PowerNode : MonoBehaviour
     private float _energy;
     private bool _receivedEnergyThisFrame = false;
 
+    public float CurrentEnergy => _energy;
+    public bool IsFullyCharged => CurrentEnergy >= GameManager.Instance.PowerNodeMaxEnergy;
+
     private void Update()
     {
         if (GameManager.Instance.CurrentPhase != GamePhase.Execute)
         {
             return;
         }
-        if (!_receivedEnergyThisFrame && _energy > 0f)
+
+        if (!_receivedEnergyThisFrame && _energy > 0f && _energy < GameManager.Instance.PowerNodeMaxEnergy)
         {
-            _energy -= Time.deltaTime * GameManager.Instance.PowerNodeDecayRate;
-            _energy = Mathf.Max(_energy, 0);
-            Debug.Log($"PowerNode at {transform.position} decaying energy. Current energy: {_energy}");
+            // Decay energy if no energy was received this frame
+            DecayEnergy();
         }
 
         UpdateEnergyBar();
 
         // Reset flag at end of frame
         _receivedEnergyThisFrame = false;
+    }
+
+    private void DecayEnergy()
+    {
+        _energy -= Time.deltaTime * GameManager.Instance.PowerNodeDecayRate;
+        _energy = Mathf.Max(_energy, 0);
+        Debug.Log($"PowerNode at {transform.position} decaying energy. Current energy: {_energy}");
     }
 
     public void ReceiveEnergyFrom(Robot robot)

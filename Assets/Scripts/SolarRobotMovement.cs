@@ -1,3 +1,4 @@
+using System;
 using Types;
 using UnityEngine;
 
@@ -5,18 +6,32 @@ public class SolarRobotMovement : MonoBehaviour
 {
     public float moveSpeed = 0.4f;
     public float tolerance;
-    public bool unchosen;
     public Rigidbody2D rb;
     private float Timer;
     private Vector2 moveDirection;
 
     SpriteRenderer spriteRenderer;
 
+    private void Awake()
+    {
+        if (RobotSelectionManager.Instance.RobotOrientation == "horizontal")
+        {
+            moveDirection = new Vector2(1, 0);
+        }
+        else if (RobotSelectionManager.Instance.RobotOrientation == "vertical")
+        {
+            moveDirection = new Vector2(0, 1);
+        }
+        else
+        {
+            moveDirection = new Vector2(1, 0);
+        }
+    }
+
     void Start()
     {
         Timer = 60f;
 
-        unchosen = true;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -40,35 +55,11 @@ public class SolarRobotMovement : MonoBehaviour
         {
             spriteRenderer.flipX = false;
         }
-
-        ProcessInput();
     }
 
     void FixedUpdate()
     {
-        if (GameManager.Instance.CurrentPhase == GamePhase.Execute)
-        {
-            Move();
-        }
-    }
-
-    void ProcessInput()
-    {
-        if (unchosen)
-        {
-            if (Input.GetKeyDown("h"))
-            {
-                moveDirection.y = 0;
-                moveDirection.x = 1;
-                unchosen = false;
-            }
-            else if (Input.GetKeyDown("v"))
-            {
-                moveDirection.x = 0;
-                moveDirection.y = 1;
-                unchosen = false;
-            }
-        }
+        Move();
     }
 
     void resetMove()
@@ -79,6 +70,12 @@ public class SolarRobotMovement : MonoBehaviour
 
     void Move()
     {
+        if (GameManager.Instance.CurrentPhase != GamePhase.Execute)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
         rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
         Vector2 Bar = transform.position;
         tolerance = 0.01f;
