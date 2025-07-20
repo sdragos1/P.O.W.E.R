@@ -252,6 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tilePrefab: {fileID: 6482152276763460878, guid: 8c4a464ce7251514fbe825152ec728fa, type: 3}
+  _powerNodePrefab: {fileID: -5229673758808231177, guid: 45bdfbed0cf5b3c4d9dbb485c0384471, type: 3}
 --- !u!4 &457825580
 Transform:
   m_ObjectHideFlags: 0
@@ -1533,6 +1534,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridWidth: 20
   _gridHeight: 10
+  _powerNodeCount: 5
+  _powerNodeMaxEnergy: 100
 --- !u!4 &1916829671
 Transform:
   m_ObjectHideFlags: 0

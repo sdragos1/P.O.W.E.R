@@ -21,18 +21,21 @@ public class GridManager : MonoBehaviour
     {
         _width = GameManager.Instance.GridWidth;
         _height = GameManager.Instance.GridHeight;
+        Transform tilesParent = GameObject.Find("Tiles")?.transform;
+
 
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
                 var spawnedTile = Instantiate(_tilePrefab, new Vector3(x, y), Quaternion.identity);
+                if (tilesParent != null)
+                    spawnedTile.transform.SetParent(tilesParent);
                 spawnedTile.name = $"Tile {x}_{y}";
 
                 var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
                 spawnedTile.Init(isOffset);
-
-
+                
                 _tiles[new Vector2(x, y)] = spawnedTile;
             }
         }
@@ -43,6 +46,8 @@ public class GridManager : MonoBehaviour
     void SpawnPowerNodes(int width, int height, int nodeCount)
     {
         List<Vector2Int> allPositions = new();
+        Transform powerNodesParent = GameObject.Find("PowerNodes")?.transform;
+        
 
         // 1. Collect all tile positions
         for (int x = 0; x < width; x++)
@@ -63,6 +68,8 @@ public class GridManager : MonoBehaviour
             Vector3 spawnPos = new(pos.x, pos.y, -1f);
 
             var node = Instantiate(_powerNodePrefab, spawnPos, Quaternion.identity);
+            if (powerNodesParent != null)
+                node.transform.SetParent(powerNodesParent);
             node.name = $"PowerNode {pos.x}_{pos.y}";
 
             _powerNodes[new Vector2(pos.x, pos.y)] = node;

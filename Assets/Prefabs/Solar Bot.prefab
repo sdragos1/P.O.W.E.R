@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 171104169743566851}
   - component: {fileID: 3149944473695621758}
   - component: {fileID: 6921858617971781732}
+  - component: {fileID: 2434536695161349980}
   m_Layer: 0
   m_Name: Solar Bot
   m_TagString: Untagged
@@ -130,3 +131,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   rb: {fileID: 3149944473695621758}
+--- !u!114 &2434536695161349980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329583605738019236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e76336376ead0d4a81ae486da6aafe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

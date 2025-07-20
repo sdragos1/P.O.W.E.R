@@ -1,16 +1,14 @@
+using System;
 using UnityEngine;
 
 public class PowerNode : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private float _energy;
+    
+    public void ReceiveEnergyFrom(Robot robot)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        float power = robot.GetPowerOutput();
+        _energy = Mathf.Min(_energy + power * Time.deltaTime, GameManager.Instance.PowerNodeMaxEnergy);
+        Console.WriteLine($"PowerNode at {transform.position} received energy. Current energy: {_energy}");
     }
 }
