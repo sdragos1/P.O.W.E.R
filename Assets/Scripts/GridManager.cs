@@ -45,7 +45,8 @@ public class GridManager : MonoBehaviour
 
         Vector2 hovered = GameManager.Instance.HoveredTilePosition.Value;
 
-
+        int    hx       = Mathf.FloorToInt(hovered.x);
+        int    hy       = Mathf.FloorToInt(hovered.y);
 
         if (RobotSelectionManager.Instance.SelectedRobot == RobotType.Solar)
         {
@@ -78,6 +79,39 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+        if (RobotSelectionManager.Instance.SelectedRobot == RobotType.Coal)
+        {
+            // Starting at the hovered tile
+            Vector2Int origin = new Vector2Int(hx, hy);
+
+            // Directions in the new desired order: right, up, left, down
+            Vector2Int[] dirs = new[]
+            {
+                Vector2Int.right,
+                Vector2Int.up,
+                Vector2Int.left,
+                Vector2Int.down
+            };
+
+            int sideLength = 3; // number of steps per side
+
+            // Highlight the origin
+            if (_tiles.TryGetValue(origin, out Tile originTile))
+                originTile.transform.Find("Movement")?.gameObject.SetActive(true);
+
+            // Walk the perimeter
+            Vector2Int current = origin;
+            foreach (var dir in dirs)
+            {
+                for (int step = 1; step <= sideLength; step++)
+                {
+                    current += dir;
+                    if (_tiles.TryGetValue(current, out Tile t))
+                        t.transform.Find("Movement")?.gameObject.SetActive(true);
+                }
+            }
+        }
+
     }
 
     void GenerateGrid()

@@ -1,140 +1,82 @@
+using Types;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class CoalRobotMovement : MonoBehaviour
 {
-    public float moveSpeed;
-    private float tolerance;
-    private bool unchosen;
-    public Rigidbody2D rb;
-    private Vector2 start;
-    private Vector2 moveDirection;
-    private float changer;
+    public float moveSpeed = 1f;
+    private const float sideLength = 3f;  // 4 tiles = move 3 units per side
 
-    SpriteRenderer spriteRenderer;
-   
+    private Rigidbody2D rb;
+    private SpriteRenderer spriteRenderer;
+
+    private Vector2[] directions = new Vector2[]
+    {
+        Vector2.right,
+        Vector2.up,
+        Vector2.left,
+        Vector2.down
+    };
+    private int directionIndex = 0;
+    private Vector2 pivot;  // where this leg started
+
     void Start()
     {
-       changer = 1;
-        unchosen = true;
+        rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        pivot = rb.position;
     }
+
     void Update()
     {
-        
-            
-
-        if (moveDirection.x == -1)
-        {
-            spriteRenderer.flipX = true;
-        }
-        else if (moveDirection.x == 1)
-        {
-            spriteRenderer.flipX = false;
-        }
-            ProcessInput();
-        
+        // Flip sprite based on horizontal direction
+        var dir = directions[directionIndex];
+        spriteRenderer.flipX = dir.x < 0;
     }
+
     void FixedUpdate()
     {
-        if (unchosen == false)
+        if (GameManager.Instance.CurrentPhase != GamePhase.Execute)
         {
-        Move();
+            rb.linearVelocity = Vector2.zero;
+            return;
         }
 
+        MoveAlongSquareWithBounce();
     }
-    void ProcessInput()
+
+    private void MoveAlongSquareWithBounce()
     {
+        Vector2 dir = directions[directionIndex];
+        Vector2 nextStep = rb.position + dir * moveSpeed * Time.fixedDeltaTime;
 
-        if (unchosen == true)
+        // 1) Boundaries of your grid
+        float minX = 0f, minY = 0f;
+        float maxX = GameManager.Instance.GridWidth  - 1;
+        float maxY = GameManager.Instance.GridHeight - 1;
+
+        // 2) If next step goes out of the main grid bounds, bounce:
+        if (nextStep.x < minX || nextStep.x > maxX ||
+            nextStep.y < minY || nextStep.y > maxY)
         {
-            if (Input.GetKeyDown("h"))
-            {
-                moveDirection.y = 0;
-                moveDirection.x = 1;
-                unchosen = false;
-                start = transform.position;
+            // Reverse direction (turn 180°)
+            directionIndex = (directionIndex + 2) % directions.Length;
+            pivot = rb.position;     // start new leg from here
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
 
-            }
-            else if (Input.GetKeyDown("v"))
-            {
-                moveDirection.x = 0;
-                moveDirection.y = 1;
-                unchosen = false;
-                start = transform.position;
+        // 3) No bounce — proceed as normal
+        rb.linearVelocity = dir * moveSpeed;
 
-            }
+        // 4) Check if we've completed this side
+        float traveled = Vector2.Dot(rb.position - pivot, dir);
+        if (traveled >= sideLength - 0.01f)
+        {
+            pivot += dir * sideLength;
+            rb.position = pivot;  // snap to avoid drift
+            directionIndex = (directionIndex + 1) % directions.Length;
         }
     }
-    void resetMove()
-    {
-        if (changer == 2)
-            {
-            moveDirection *= -1;
-            changer = 0;
-            }
-        start = transform.position;
-        float tempX = moveDirection.x;
-        moveDirection.x = moveDirection.y;
-        moveDirection.y = tempX;
-        changer += 1;
-
-    }
-    void explosion()
-    {
-        Destroy(gameObject);
-    }
-    void Move()
-    {
-        rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed,moveDirection.y * moveSpeed);
-        Vector2 Current = transform.position;
-        tolerance = 0.01f;
-
-
-
-        if (Mathf.Abs(start.x + 3f - Current.x) < tolerance)
-          {
-            resetMove();
-          }
-       else if (Mathf.Abs(start.y + 3f - Current.y) < tolerance)
-        {
-            resetMove();
-        }
-        else if (Mathf.Abs(start.x - 3f - Current.x) < tolerance)
-        {
-            resetMove();
-        }
-        else if (Mathf.Abs(start.y - 3f - Current.y) < tolerance)
-        {
-            resetMove();
-        }
-        //Explosion
-        if (Mathf.Round(Current.x) == 20) 
-        {
-            
-            explosion();
-        }
-        else if (Mathf.Round(Current.y) == 10)
-        {
-            explosion();
-
-
-        }
-        else if (Mathf.Round(Current.x) == -1)
-        {
-            explosion();
-
-
-        }
-        else if (Mathf.Round(Current.y) == -1)
-        {
-            explosion();
-
-
-        }
-
-
-
-
-    }
-    
 }
