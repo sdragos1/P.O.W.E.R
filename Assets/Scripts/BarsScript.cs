@@ -18,14 +18,14 @@ public class BarsScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("q"))
+        if (Input.GetKeyDown("r"))
         {
             setPollution(-20f);
         }
 
-        if (Input.GetKeyDown("d"))
+        if (Input.GetKeyDown("e"))
         {
-            Debug.Log("nigger");
+
             setPollution(+20f);
         }
 

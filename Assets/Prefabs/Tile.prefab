@@ -105,8 +105,8 @@ MonoBehaviour:
   _offsetColor: {r: 0.9137255, g: 0.9019608, b: 0.9019608, a: 1}
   _renderer: {fileID: 6814349105678055548}
   _highlight: {fileID: 6698207687217295573}
-  _solarRobotPrefab: {fileID: 8565255062466585693, guid: 8923f294d1da08342a3a77667a27c925, type: 3}
-  _coalRobotPrefab: {fileID: 3670602387797580203, guid: 8a77ff2d8ab2c684e9cc8dcb95b20281, type: 3}
+  _solarRobotPrefab: {fileID: 329583605738019236, guid: 91c354ede44a0744684afeb1f19958c8, type: 3}
+  _coalRobotPrefab: {fileID: 4559459563158528384, guid: 61ebef53c9507ad49beb26cf475bf4ff, type: 3}
 --- !u!61 &9029846406053030350
 BoxCollider2D:
   m_ObjectHideFlags: 0
