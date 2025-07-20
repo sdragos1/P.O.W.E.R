@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using Types;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 public class GridManager : MonoBehaviour
 {
@@ -20,6 +23,61 @@ public class GridManager : MonoBehaviour
     private void Start()
     {
         GenerateGrid();
+    }
+
+    private void Update()
+    {
+        DisplayRobotMovement();
+    }
+
+    private void DisplayRobotMovement()
+    {
+        if (GameManager.Instance.CurrentPhase != GamePhase.Plan) return;
+        foreach (var kv in _tiles)
+        {
+            var tileGO = kv.Value.gameObject;
+            var movementGO = tileGO.transform.Find("Movement")?.gameObject;
+            if (movementGO != null && movementGO.activeSelf)
+                movementGO.SetActive(false);
+        }
+        if (RobotSelectionManager.Instance.SelectedRobot == RobotType.None) return;
+        if (!GameManager.Instance.HoveredTilePosition.HasValue) return;
+
+        Vector2 hovered = GameManager.Instance.HoveredTilePosition.Value;
+
+
+
+        if (RobotSelectionManager.Instance.SelectedRobot == RobotType.Solar)
+        {
+            if (RobotSelectionManager.Instance.RobotOrientation == "horizontal")
+            {
+                float y = hovered.y;
+                for (int x = 0; x < _width; x++)
+                {
+                    Vector2 key = new Vector2(x, y);
+                    if (_tiles.TryGetValue(key, out Tile tile))
+                    {
+                        var movementGO = tile.transform.Find("Movement")?.gameObject;
+                        if (movementGO != null)
+                            movementGO.SetActive(true);
+                    }
+                }
+            }
+            if (RobotSelectionManager.Instance.RobotOrientation == "vertical")
+            {
+                float x = hovered.x;
+                for (int y = 0; y < _height; y++)
+                {
+                    Vector2 key = new Vector2(x, y);
+                    if (_tiles.TryGetValue(key, out Tile tile))
+                    {
+                        var movementGO = tile.transform.Find("Movement")?.gameObject;
+                        if (movementGO != null)
+                            movementGO.SetActive(true);
+                    }
+                }
+            }
+        }
     }
 
     void GenerateGrid()
@@ -46,7 +104,7 @@ public class GridManager : MonoBehaviour
                     spawnedTile.name = $"Tile {x}_{y}";
 
                     var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
-                    spawnedTile.Init(isOffset);
+                    spawnedTile.Init(isOffset, new Vector2(x, y));
 
                     _tiles[new Vector2(x, y)] = spawnedTile;
                 }

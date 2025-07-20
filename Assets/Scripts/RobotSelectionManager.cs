@@ -21,7 +21,9 @@ public class RobotSelectionManager : MonoBehaviour
     public RobotType SelectedRobot { get; private set; } = RobotType.None;
 
     private readonly List<SelectableButtonUI> _buttons = new();
+    private string _robotOrientation = "horizontal"; // Default orientation
 
+    public string RobotOrientation => _robotOrientation;
 
     public Sprite GetSpriteFor(RobotType type)
     {
@@ -32,7 +34,7 @@ public class RobotSelectionManager : MonoBehaviour
     {
         return _robots.Find(r => r.type == type)?.prefab;
     }
-    
+
     public GameObject GetCurrentSelectedRobotPrefab()
     {
         return GetPrefabFor(SelectedRobot);
@@ -56,5 +58,22 @@ public class RobotSelectionManager : MonoBehaviour
     public void ClearSelection()
     {
         Instance.SelectedRobot = RobotType.None;
+    }
+
+    private void Update()
+    {
+        ProcessInput();
+    }
+
+    void ProcessInput()
+    {
+        if (Input.GetKeyDown("h"))
+        {
+            _robotOrientation = "horizontal";
+        }
+        else if (Input.GetKeyDown("v"))
+        {
+            _robotOrientation = "vertical";
+        }
     }
 }

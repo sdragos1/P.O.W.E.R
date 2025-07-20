@@ -7,9 +7,11 @@ public class Tile : MonoBehaviour
     [SerializeField] private Color _offsetColor;
     [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private GameObject _highlight;
+    private Vector2 _position;
 
-    public void Init(bool isOffset)
+    public void Init(bool isOffset, Vector2 position)
     {
+        _position = position;
         if (isOffset)
         {
             _renderer.color = _offsetColor;
@@ -18,11 +20,15 @@ public class Tile : MonoBehaviour
 
     void OnMouseEnter()
     {
+        if (GameManager.Instance.CurrentPhase != GamePhase.Plan)
+            return;
+        GameManager.Instance.SetHoveredTilePosition(_position);
         _highlight.SetActive(true);
     }
 
     void OnMouseExit()
     {
+        GameManager.Instance.ClearHoveredTilePosition();
         _highlight.SetActive(false);
     }
 

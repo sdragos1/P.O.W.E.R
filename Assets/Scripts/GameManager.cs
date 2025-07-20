@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
     
     private GamePhase _currentPhase = GamePhase.None;
     
+    private Vector2? _hoveredTilePosition = null;
+    
     public GamePhase CurrentPhase => _currentPhase;
     public int GridWidth => _gridWidth;
     public int GridHeight => _gridHeight;
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour
     public int PowerNodeCount => _powerNodeCount;
     public float PowerNodeMaxEnergy => _powerNodeMaxEnergy;
     public float PowerNodeDecayRate => _powerNodeDecayRate;
+    public Vector2? HoveredTilePosition => _hoveredTilePosition;
 
     private void Start()
     {
@@ -72,5 +75,15 @@ public class GameManager : MonoBehaviour
     {
         _currentPhase = (GamePhase)newPhase;
         UpdateUI();
+    }
+    
+    public void SetHoveredTilePosition(Vector2 position)
+    {
+        _hoveredTilePosition = position;
+    }
+    
+    public void ClearHoveredTilePosition()
+    {
+        _hoveredTilePosition = null;
     }
 }

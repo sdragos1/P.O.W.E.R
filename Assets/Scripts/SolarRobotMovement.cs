@@ -1,3 +1,4 @@
+using System;
 using Types;
 using UnityEngine;
 
@@ -11,6 +12,22 @@ public class RobotMovement : MonoBehaviour
     private Vector2 moveDirection;
 
     SpriteRenderer spriteRenderer;
+
+    private void Awake()
+    {
+        if (RobotSelectionManager.Instance.RobotOrientation == "horizontal")
+        {
+            moveDirection = new Vector2(1, 0);
+        }
+        else if (RobotSelectionManager.Instance.RobotOrientation == "vertical")
+        {
+            moveDirection = new Vector2(0, 1);
+        }
+        else
+        {
+            moveDirection = new Vector2(1, 0);
+        }
+    }
 
     void Start()
     {
@@ -41,7 +58,6 @@ public class RobotMovement : MonoBehaviour
             spriteRenderer.flipX = false;
         }
 
-        ProcessInput();
     }
 
     void FixedUpdate()
@@ -51,26 +67,7 @@ public class RobotMovement : MonoBehaviour
             Move();
         }
     }
-
-    void ProcessInput()
-    {
-        if (unchosen)
-        {
-            if (Input.GetKeyDown("h"))
-            {
-                moveDirection.y = 0;
-                moveDirection.x = 1;
-                unchosen = false;
-            }
-            else if (Input.GetKeyDown("v"))
-            {
-                moveDirection.x = 0;
-                moveDirection.y = 1;
-                unchosen = false;
-            }
-        }
-    }
-
+    
     void resetMove()
     {
         moveDirection *= -1;
