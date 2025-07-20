@@ -1,29 +1,26 @@
 using UnityEngine;
 
-public class SolarRobotMovement : MonoBehaviour
+public class CoalRobotMovement : MonoBehaviour
 {
     public float moveSpeed;
     private float tolerance;
     private bool unchosen;
     public Rigidbody2D rb;
-    private float Timer;
+    private Vector2 start;
     private Vector2 moveDirection;
 
     SpriteRenderer spriteRenderer;
     
     void Start()
     {
-        Timer = 60f;
         
+
         unchosen = true;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
     void Update()
     {
-        if (Timer < 60f)
-        {
-            Timer += 1;
-        }
+        
             
 
         if (moveDirection.x == -1)
@@ -44,6 +41,7 @@ public class SolarRobotMovement : MonoBehaviour
     }
     void ProcessInput()
     {
+
         if (unchosen == true)
         {
             if (Input.GetKeyDown("h"))
@@ -51,51 +49,58 @@ public class SolarRobotMovement : MonoBehaviour
                 moveDirection.y = 0;
                 moveDirection.x = 1;
                 unchosen = false;
+                start = transform.position;
 
-                
             }
             else if (Input.GetKeyDown("v"))
             {
                 moveDirection.x = 0;
                 moveDirection.y = 1;
                 unchosen = false;
+                start = transform.position;
+
             }
         }
     }
     void resetMove()
     {
-        moveDirection *= -1;
-        Timer = 0f;
+        start = transform.position;
+        float tempX = moveDirection.x;
+        moveDirection.x = moveDirection.y;
+        moveDirection.y = tempX;
     }
     void Move()
     {
         rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed,moveDirection.y * moveSpeed);
-        Vector2 Bar = transform.position;
-        tolerance = 0.01f;
-        if (Timer == 60f)
+        Vector2 Current = transform.position;
+        tolerance = 0.01f; 
+        if (Mathf.Abs(start.x + 3f - Current.x) < tolerance)
+          {
+            
+            resetMove();
+          }
+       else if (Mathf.Abs(start.y + 3f - Current.y) < tolerance)
         {
-            if (Mathf.Abs(Bar.x - 19f) < tolerance)
-            {
 
-                resetMove();
-            }
-            else if (Mathf.Abs(Bar.y - 9f) < tolerance)
-            {
-
-                resetMove();
-            }
-            else if (Mathf.Abs(Bar.x) < tolerance)
-            {
-
-                resetMove();
-            }
-            else if (Mathf.Abs(Bar.y) < tolerance)
-            {
-
-                resetMove();
-            }
+            moveDirection *= -1;
+            resetMove();
         }
-        
+        else if (Mathf.Abs(start.x - 3f - Current.x) < tolerance)
+        {
+            resetMove();
+        }
+        else if (Mathf.Abs(start.y - 3f - Current.y) < tolerance)
+        {
+
+            moveDirection *= -1;
+            resetMove();
+        }
+
+
+
+
+
+
     }
     
 }

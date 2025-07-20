@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class SolarRobotMovement : MonoBehaviour
+public class RobotMovement : MonoBehaviour
 {
     public float moveSpeed;
-    private float tolerance;
-    private bool unchosen;
+    public float tolerance;
+    public bool unchosen;
     public Rigidbody2D rb;
     private float Timer;
     private Vector2 moveDirection;
@@ -72,6 +72,7 @@ public class SolarRobotMovement : MonoBehaviour
         rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed,moveDirection.y * moveSpeed);
         Vector2 Bar = transform.position;
         tolerance = 0.01f;
+        Debug.Log(Timer);
         if (Timer == 60f)
         {
             if (Mathf.Abs(Bar.x - 19f) < tolerance)
