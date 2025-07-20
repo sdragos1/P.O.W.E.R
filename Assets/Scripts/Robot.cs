@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Types;
 
 [RequireComponent(typeof(LineRenderer))]
 public class Robot : MonoBehaviour
@@ -21,6 +22,10 @@ public class Robot : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.CurrentPhase != GamePhase.Execute)
+        {
+            return;
+        }
         DetectNearbyPowerNodes();
     }
 

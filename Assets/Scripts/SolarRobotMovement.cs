@@ -1,8 +1,9 @@
+using Types;
 using UnityEngine;
 
 public class RobotMovement : MonoBehaviour
 {
-    public float moveSpeed;
+    public float moveSpeed = 0.4f;
     public float tolerance;
     public bool unchosen;
     public Rigidbody2D rb;
@@ -26,6 +27,10 @@ public class RobotMovement : MonoBehaviour
             Timer += 1;
         }
 
+        if (GameManager.Instance.CurrentPhase != GamePhase.Execute)
+        {
+            return;
+        }
 
         if (moveDirection.x == -1)
         {
@@ -41,7 +46,10 @@ public class RobotMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
+        if (GameManager.Instance.CurrentPhase == GamePhase.Execute)
+        {
+            Move();
+        }
     }
 
     void ProcessInput()

@@ -18,7 +18,13 @@ public class GameManager : MonoBehaviour
     [Header("General Settings")]
     [SerializeField] private Vector2 hotspot = Vector2.zero;
     [SerializeField] private Texture2D customCursor;
+
+    [SerializeField] private GameObject bottomUI;
+    [SerializeField] private GameObject topUI;
     
+    private GamePhase _currentPhase = GamePhase.None;
+    
+    public GamePhase CurrentPhase => _currentPhase;
     public int GridWidth => _gridWidth;
     public int GridHeight => _gridHeight;
     
@@ -28,6 +34,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        _currentPhase = GamePhase.Plan;
+        UpdateUI();
         Cursor.SetCursor(customCursor, hotspot, CursorMode.Auto);
     }
     
@@ -41,5 +49,28 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void UpdateUI()
+    {
+        switch (_currentPhase)
+        {
+            case GamePhase.Plan:
+                bottomUI.SetActive(true);
+                topUI.SetActive(false);
+                break;
+            case GamePhase.Execute:
+                topUI.SetActive(true);
+                bottomUI.SetActive(false);
+                break;
+            case GamePhase.Finish:
+                break;
+        }
+    }
+    
+    public void SetPhaseAndUpdateUI(int newPhase)
+    {
+        _currentPhase = (GamePhase)newPhase;
+        UpdateUI();
     }
 }

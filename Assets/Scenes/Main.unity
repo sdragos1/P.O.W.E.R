@@ -1184,7 +1184,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 911039308}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1916829670}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SetPhaseAndUpdateUI
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &911039308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1972,6 +1984,8 @@ MonoBehaviour:
   _powerNodeDecayRate: 5
   hotspot: {x: 0, y: 0}
   customCursor: {fileID: 2800000, guid: 4b3969b25b686cb469d678c5a3272392, type: 3}
+  bottomUI: {fileID: 657804298}
+  topUI: {fileID: 342061423}
 --- !u!4 &1916829671
 Transform:
   m_ObjectHideFlags: 0
