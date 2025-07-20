@@ -6,7 +6,6 @@ public class RobotMovement : MonoBehaviour
     public Rigidbody2D rb;
     private Vector2 moveDirection;
 
-    [SerializeField] Sprite newSprite;
     SpriteRenderer spriteRenderer;
     void Start()
     {
@@ -21,10 +20,6 @@ public class RobotMovement : MonoBehaviour
         else if (moveDirection.x == 1)
         {
             spriteRenderer.flipX = false;
-        }
-        else if (moveDirection.y == 1)
-        {
-            spriteRenderer.sprite = newSprite;
         }
             ProcessInput();
         

@@ -49,7 +49,8 @@ public class Tile : MonoBehaviour
         Console.WriteLine("Robot spawned at: " + transform.position);
         if (robotPrefab == null) return;
 
-        var robot = Instantiate(robotPrefab, transform.position, Quaternion.identity);
+        Vector3 spawnPosition = new Vector3(transform.position.x, transform.position.y, -1f);
+        var robot = Instantiate(robotPrefab, spawnPosition, Quaternion.identity);
         robot.transform.SetParent(transform);
     }
 }
